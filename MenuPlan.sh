@@ -19,7 +19,7 @@ makeRepository()
 { 
 
     y=0 
-
+    success=false
      
 
     while [ $y = 0 ] 
@@ -28,35 +28,60 @@ makeRepository()
 
         clear 
 
-        echo "please enter the repository name" 
+        while [ "$success" = false ]; do
 
-        read repoName
+            echo "Enter the repository name:"  
 
-        mkdir Projects/"$repoName"
+  
+
+            read repoName 
+
+  
         
-        mkdir Projects/"$repoName"/Backups
+            mkdir Projects/"$repoName" 
+                if [ "$?" = "0" ]; then
+                    success=true
+                 else 
+                    clear
+                     echo "Folder Creation Error, please check and try again"
+                    success=false
+                fi
+        done
+        success=false
+          mkdir Projects/"$repoName"/Backups 
 
-        cd Projects/"$repoName"/
+  
 
-        touch .checkouts
+          cd Projects/"$repoName"/ 
 
-        cd ../..
+  
 
-        echo "please enter the path and name of the file you want to use as the initial file for the repositry" 
+          touch .checkouts 
 
-       # echo "e.g. Project/fileName.txt" 
+  
 
-        read fileRef 
+          cd ../.. 
+        SelectedRepo=$repoName
 
-       # dt=$(date '+%d.%m.%Y %H.%M.%S');
+        while [ "$success" = false ]; do
+        echo "please enter the path and name of the file you want to use as the initial file for the repositry"  
+                read fileRef
+                if [ ! -f "$fileRef" ]; then
+                    clear
+                    echo "File copy error, please check and try again"
+                    success=false
+                else 
+                    success=true
+                    cp $fileRef Projects/"$repoName"/"$fileRef"  
+                fi
+                done
+ 
 
-        cp $fileRef Projects/"$repoName"/"$fileRef" 
+        y=1  
 
-         SelectedRepo="$repoName"
+  
 
-        y=1 
-
-     done
+     done 
 
      dateTime=$(date '+%d/%m/%Y %H:%M:%S');
 
@@ -190,9 +215,9 @@ updateRetrievedFile()
         read fileRef 
 
         
-        cp Projects/"$SelectedRepo"/Project Projects/"$SelectedRepo"/Backups/Project"$dt"
+        cp Projects/"$SelectedRepo"/"$fileRef" Projects/"$SelectedRepo"/Backups/"$fileRef $dt"
 
-        cp $fileRef Projects/"$SelectedRepo"/Project
+        cp $fileRef Projects/"$SelectedRepo"/"$fileRef"
 
         
 
