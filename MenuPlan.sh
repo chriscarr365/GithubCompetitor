@@ -77,34 +77,89 @@ retrieveFile()
 
     while [ $y = 0 ] 
 
-    do 
-
-        clear 
+    do   
 
   
 
-        echo "Please enter the name of the file to retreive: " 
+        clear  
 
-         
+  
+
+        echo "Please enter the name of the file to retreive from the following: "
+        ls "Projects/$SelectedRepo"
 
         read fToRetrieve 
+        if grep -Fxq "fToRetrieve" Projects/"$SelectedRepo"/.checkouts
+        then
+            echo "WARN: This file has already been checked out by you or another user"
+            echo "You may continue, but this may cause conflicts later on"
+            echo "Do you want to continue? y/n"
+            read continueYN
+        fi
+        
+        case "$continueYN" in
+            "y") 
+                echo "continuing"
+            ;;
 
-         
+            "n")
+                return
+            ;;
+        esac
+        
+        echo "Do you want this file to be saved to your Downloads?" 
 
-        echo "The file will be saved to your downloads" 
+        echo "y/n" 
 
-        echo "$fToRetrieve"
+  
 
-        sleep 1
+        read answer 
 
-        cp /Projects/"$SelectedRepo"/"$fToRetrieve" /testRetrieve 
+  
 
-        y=1
+        case "$answer" in 
 
-    done
+            "y") 
 
-} 
+                cp ./Projects/"$SelectedRepo"/"$fToRetrieve" ~/Downloads/"$fToRetrieve" 
+                echo "File copied to Downloads"
+                #echo "$fToRetrieve" >> "Projects/$SelectedRepo/.checkouts"
+                file1=Projects/"$SelectedRepo"/.checkouts
+                echo "$fToRetrieve" >> $file1 
+                sleep 2 
+            ;; 
 
+  
+
+            "n") 
+
+                echo "Please input the path to the directory you would like to save to" 
+
+                echo "The path will start at your home directory" 
+
+                echo "e.g. Documents/myFolder" 
+
+      
+
+                read path 
+
+      
+
+                cp ./Projects/TestProject/"$fToRetrieve" ~/"$path"/"$fToRetrieve" 
+                #echo "$fToRetrieve" << "Projects/$SelectedRepo/.checkouts"
+                file1=Projects/"$SelectedRepo"/.checkouts
+                echo "$fToRetrieve" >> $file1 
+            ;; 
+
+  
+
+        esac 
+
+  
+
+        y=1 
+    done 
+}
 
 updateRetrievedFile()
 { 
@@ -291,7 +346,7 @@ clear
 
 mainCase=0
 
-while [[ "$mainCase" = 0 ]];
+while [ "$mainCase" = 0 ]
 do
     #statements
     echo "----------MENU----------"
@@ -314,7 +369,8 @@ do
     
         repoCase=0
 
-        while [[ "$repoCase" = 0 ]]; do
+        while [ "$repoCase" = 0 ]
+        do
 
             #New nested case for repository menu
             echo "1) Create new repository"
@@ -390,7 +446,8 @@ do
 
         optionCase=0
 
-        while [[ "$optionCase" = 0 ]]; do
+        while [ "$optionCase" = 0 ]
+        do
             #statements
             #New nested case for options menu
             echo "1) Select repository"
