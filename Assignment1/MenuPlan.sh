@@ -15,95 +15,8 @@ addUser()
 
 }
 
-currentRepo=0
-
-initLoop=0
-
-userLoop=0
-
-while [ $userLoop = 0 ]
-	 do
-	echo "Select user"
-	cat ListOfUsers
-	read user
-
-    if grep -Fxq "$user" ListOfUsers  
-        then
-            userLoop=1
-        else
-            echo "User not found, try again"
-    fi
-	
-done
-
-while [ $initLoop = 0 ] 
-	do
-	#SETS UP WHICH REPOSITORY TO USE AT PROGRAM STARTUP
-	echo "Select or create repository (S/C)"
-	read selectOrCreate
-
-    case $selectOrCreate in
-
-        "S" | "s")
-
-            selectRepoLoop=0
-
-            while [ $selectRepoLoop = 0 ] 
-            do
-                echo "Select repository"
-                ls Projects
-                read SelectedRepo
-
-
-#########################NOT WORKING######################################
-                if find Projects/ -iname "$SelectedRepo"  
-                    then
-                        selectRepoLoop=1
-                    else
-                        echo "Repository not found, try again"
-                fi
-            done
-###########################################################################
-            
-
-
-            initLoop=1
-            ;;
-
-        "C" | "c")
-            makeRepository
-            initLoop=1
-            ;;
-            
-        *)
-            echo "Invalid choice, try again"
-            ;;
-    esac
-
-
-
-#	if [ "$selectOrCreate" == "S" ] 
-#		then
-#			echo "Select repository"
-#			ls Projects
-#			read SelectedRepo
-#			initLoop=1
-#	fi
-#
-#	if [ "$selectOrCreate" == "C" ] 
-#		then
-#			makeRepository
-#			initLoop=1
-#	fi
-	
-done
-
 makeRepository()
 { 
-
-  echo "method test"
-
-  sleep 2
 
     y=0 
 
@@ -115,19 +28,19 @@ makeRepository()
 
         clear 
 
-      	echo "please enter the repositry name" 
+        echo "please enter the repository name" 
 
-      	read repoName
+        read repoName
 
-		mkdir Projects/"$repoName"
-      	
-      	mkdir Projects/"$repoName"/Backups
+        mkdir Projects/"$repoName"
+        
+        mkdir Projects/"$repoName"/Backups
 
-      	cd Projects/"$repoName"/
+        cd Projects/"$repoName"/
 
-      	touch .checkouts
+        touch .checkouts
 
-      	cd ../..
+        cd ../..
 
         echo "please enter the path and name of the file you want to use as the initial file for the repositry" 
 
@@ -183,9 +96,9 @@ retrieveFile(){
 
         cp /Projects/"$SelectedRepo"/"$fToRetrieve" /testRetrieve 
 
-  		y=1
+        y=1
 
-  	done
+    done
 
 } 
 
@@ -295,6 +208,91 @@ viewFiles()
 
     read exit 
 } 
+
+currentRepo=0
+
+initLoop=0
+
+userLoop=0
+
+while [ $userLoop = 0 ]
+	 do
+	echo "Select user"
+	cat ListOfUsers
+	read user
+
+    if grep -Fxq "$user" ListOfUsers  
+        then
+            userLoop=1
+        else
+            echo "User not found, try again"
+    fi
+	
+done
+
+while [ $initLoop = 0 ] 
+	do
+	#SETS UP WHICH REPOSITORY TO USE AT PROGRAM STARTUP
+	echo "Select or create repository (S/C)"
+	read selectOrCreate
+
+    case $selectOrCreate in
+
+        "S" | "s")
+
+            selectRepoLoop=0
+
+            while [ $selectRepoLoop = 0 ] 
+            do
+                echo "Select repository"
+                ls Projects
+                read SelectedRepo
+
+
+#########################NOT WORKING######################################
+                if find Projects/ -iname "$SelectedRepo"  
+                    then
+                        selectRepoLoop=1
+                    else
+                        echo "Repository not found, try again"
+                fi
+            done
+###########################################################################
+            
+
+
+            initLoop=1
+            ;;
+
+        "C" | "c")
+            makeRepository
+            initLoop=1
+            ;;
+            
+        *)
+            echo "Invalid choice, try again"
+            ;;
+    esac
+
+
+
+#	if [ "$selectOrCreate" == "S" ] 
+#		then
+#			echo "Select repository"
+#			ls Projects
+#			read SelectedRepo
+#			initLoop=1
+#	fi
+#
+#	if [ "$selectOrCreate" == "C" ] 
+#		then
+#			makeRepository
+#			initLoop=1
+#	fi
+	
+done
+
+
 
 
 clear 
