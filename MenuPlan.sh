@@ -89,7 +89,7 @@ retrieveFile()
         ls "Projects/$SelectedRepo"
 
         read fToRetrieve 
-        if grep -Fxq "fToRetrieve" Projects/"$SelectedRepo"/.checkouts
+        if grep -Fxq "$fToRetrieve" Projects/"$SelectedRepo"/.checkouts
         then
             echo "WARN: This file has already been checked out by you or another user"
             echo "You may continue, but this may cause conflicts later on"
@@ -99,7 +99,7 @@ retrieveFile()
         
         case "$continueYN" in
             "y") 
-                echo "continuing"
+                echo "Continuing..."
             ;;
 
             "n")
@@ -283,6 +283,7 @@ while [ $userLoop = 0 ]
 do
 	echo "Select user"
 	cat ListOfUsers
+    echo
 	read user
 
     if grep -Fxq "$user" ListOfUsers  
